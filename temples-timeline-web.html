@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+
+
+<body>
+
+
+<canvas id="myCanvas" width="1080" height="1980"
+style="border:1px solid #c3c3c3;">
+Your browser does not support the canvas element.
+</canvas>
+
+<script>
+
+    
+
+
+
+window.onload = function() {
+
+    var canvas = document.getElementById("myCanvas");
+    var ctx = canvas.getContext("2d");
+
+    ctx.drawImage(temple_1, 10, 10, 100, 100);
+
+    ctx.drawImage(temple_2, 110, 110, 100, 100);
+
+    ctx.drawImage(temple_3, 210, 210, 100, 100);
+
+    ctx.beginPath();
+    ctx.moveTo(1080 / 2, 1980 / 2);
+
+
+    spiralCoordinates.forEach( (coordinate) => {
+        //console.log(coordinate);
+        ctx.lineTo(coordinate[0], coordinate[1]);
+    
+    });
+    
+    
+    ctx.stroke();
+
+}
+
+var spiralCoordinates = [];
+
+for (t = -18; t < 17.5; t += 0.02) {
+    // float x = centerX + initialR * (float) (Math.exp(t * 1 / (Math.tan(47 * Math.PI / 100)))) * (float) (Math.cos(t));
+    // float y = centerY + initialR * (float) (Math.exp(t * 1 / (Math.tan(47 * Math.PI / 100)))) * (float) (Math.sin(t));
+
+    var x = 1080 / 2 + 108 * (Math.exp(t * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.cos(t));
+    var y = 1980 / 2 + 108 * (Math.exp(t * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.sin(t));
+
+    spiralCoordinates.push([x, y]);
+    //console.log(x + " and " + y);
+    
+}
+
+//console.log(spiralCoordinates);
+
+
+var temple_1 = new Image();
+temple_1.src = 'salt_lake_temple_large.webp';
+
+var temple_2 = new Image();
+temple_2.src = 'provo_temple_large.webp';
+
+var temple_3 = new Image();
+temple_3.src = 'provo_city_center_temple_large.webp';
+
+
+
+
+</script>
+
+</body>
+</html>
+
