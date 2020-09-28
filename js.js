@@ -1,20 +1,26 @@
 
 
-window.onload = function() {
+console.log("js running")
 
-    var canvas = document.getElementById("myCanvas");
-    var ctx = canvas.getContext("2d");
+var canvas = document.getElementById("myCanvas");
+var ctx = canvas.getContext("2d");
+
+// read image names from a file 
+var temple_image_names = readTextFile("temple_image_names.txt");
+// load images according to image names array
+temple_images = loadAllImages(temple_image_names);
+
+// get spiral coodinates and size on each coordinate 
+var spiralCoordinatesAndSizes = getSpiralCoordinatesAndSizes();
+
+var slider = document.getElementById("myRange");
+
+var theta = 2000;
+
+window.onload = function() {
 
     ctx.beginPath();
     ctx.moveTo(1080 / 2, 1980 / 2);
-
-    // read image names from a file 
-    var temple_image_names = readTextFile("temple_image_names.txt");
-    // load images according to image names array
-    temple_images = loadAllImages(temple_image_names);
-
-    // get spiral coodinates and size on each coordinate 
-    var spiralCoordinatesAndSizes = getSpiralCoordinatesAndSizes();
 
     // draw a spiral, let's see how it looks like 
     spiralCoordinatesAndSizes.forEach( (coordinate) => {
@@ -23,21 +29,35 @@ window.onload = function() {
     });
     ctx.stroke();
 
-    // place all images on canvas 
-    for (i = 0; i < temple_image_names.length; i ++) {
-        //console.log('drawing temple number ' + i);
+}
 
-        var position_index = 2000 - 30 * i;
+window.onchange = function() {
 
-        if (position_index > 0 && position_index < spiralCoordinatesAndSizes.length) {
-            var currentX = spiralCoordinatesAndSizes[position_index][0] - spiralCoordinatesAndSizes[position_index][2] / 2;
-            var currentY = spiralCoordinatesAndSizes[position_index][1] - spiralCoordinatesAndSizes[position_index][2] / 2;
-            var currentSize = spiralCoordinatesAndSizes[position_index][2];
 
-            ctx.drawImage(temple_images[i], currentX, currentY, currentSize, currentSize);
+}
 
-        }
-    }
+function sliderChange() {
+
+    theta = slider.value;
+    console.log(theta);
+
+        // // place all images on canvas 
+        // for (i = 0; i < temple_image_names.length; i ++) {
+        //     //console.log('drawing temple number ' + i);
+    
+        //     var position_index = theta - 30 * i;
+    
+        //     if (position_index > 0 && position_index < spiralCoordinatesAndSizes.length) {
+        //         var currentX = spiralCoordinatesAndSizes[position_index][0] - spiralCoordinatesAndSizes[position_index][2] / 2;
+        //         var currentY = spiralCoordinatesAndSizes[position_index][1] - spiralCoordinatesAndSizes[position_index][2] / 2;
+        //         var currentSize = spiralCoordinatesAndSizes[position_index][2];
+    
+        //         ctx.drawImage(temple_images[i], currentX, currentY, currentSize, currentSize);
+    
+        //     }
+        // }
+
+
 }
 
 
