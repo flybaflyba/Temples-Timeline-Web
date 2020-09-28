@@ -41,21 +41,21 @@ function sliderChange() {
     theta = slider.value;
     console.log(theta);
 
-        // // place all images on canvas 
-        // for (i = 0; i < temple_image_names.length; i ++) {
-        //     //console.log('drawing temple number ' + i);
-    
-        //     var position_index = theta - 30 * i;
-    
-        //     if (position_index > 0 && position_index < spiralCoordinatesAndSizes.length) {
-        //         var currentX = spiralCoordinatesAndSizes[position_index][0] - spiralCoordinatesAndSizes[position_index][2] / 2;
-        //         var currentY = spiralCoordinatesAndSizes[position_index][1] - spiralCoordinatesAndSizes[position_index][2] / 2;
-        //         var currentSize = spiralCoordinatesAndSizes[position_index][2];
-    
-        //         ctx.drawImage(temple_images[i], currentX, currentY, currentSize, currentSize);
-    
-        //     }
-        // }
+    // place all images on canvas 
+    for (i = 0; i < temple_image_names.length; i ++) {
+        //console.log('drawing temple number ' + i);
+
+        var position_index = theta - 30 * i;
+
+        if (position_index > 0 && position_index < spiralCoordinatesAndSizes.length) {
+            var currentX = spiralCoordinatesAndSizes[position_index][0] - spiralCoordinatesAndSizes[position_index][2] / 2;
+            var currentY = spiralCoordinatesAndSizes[position_index][1] - spiralCoordinatesAndSizes[position_index][2] / 2;
+            var currentSize = spiralCoordinatesAndSizes[position_index][2];
+
+            ctx.drawImage(temple_images[i], currentX, currentY, currentSize, currentSize);
+
+        }
+    }
 
 
 }
