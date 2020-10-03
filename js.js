@@ -27,7 +27,7 @@ window.onload = function() {
     console.log("canvas width is " + canvasWidth);
     console.log("canvas height is " + canvasHeight);
 
-    
+
     // read image names from a file 
     temple_image_names = readTextFile("temple_image_names.txt");
     // load images according to image names array
@@ -71,6 +71,8 @@ window.onchange = function() {
 }
 
 function sliderChange() {
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     theta = slider.value;
     //console.log(theta);
