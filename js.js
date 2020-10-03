@@ -4,23 +4,33 @@ console.log("js running")
 
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
-
-// read image names from a file 
-var temple_image_names = readTextFile("temple_image_names.txt");
-// load images according to image names array
-temple_images = loadAllImages(temple_image_names);
-
-// get spiral coodinates and size on each coordinate 
-var spiralCoordinatesAndSizes = getSpiralCoordinatesAndSizes();
-
 var slider = document.getElementById("myRange");
-
 var theta = 2000;
+var width;
+var hight;
+var temple_image_names;
+var temple_images;
+var spiralCoordinatesAndSizes;
 
 window.onload = function() {
 
+    width = canvas.getBoundingClientRect().width;
+    height = canvas.getBoundingClientRect().height;
+    console.log("canvas width is " + width);
+    console.log("canvas height is " + height);
+
+
+    // read image names from a file 
+    temple_image_names = readTextFile("temple_image_names.txt");
+    // load images according to image names array
+    temple_images = loadAllImages(temple_image_names);
+
+    // get spiral coodinates and size on each coordinate 
+    spiralCoordinatesAndSizes = getSpiralCoordinatesAndSizes();
+
+
     ctx.beginPath();
-    ctx.moveTo(1080 / 2, 1980 / 2);
+    ctx.moveTo(width / 2, height / 2);
 
     // draw a spiral, let's see how it looks like 
     spiralCoordinatesAndSizes.forEach( (coordinate) => {
@@ -28,6 +38,7 @@ window.onload = function() {
         ctx.lineTo(coordinate[0], coordinate[1]);
     });
     ctx.stroke();
+
 
 }
 
@@ -39,7 +50,7 @@ window.onchange = function() {
 function sliderChange() {
 
     theta = slider.value;
-    console.log(theta);
+    //console.log(theta);
 
     // place all images on canvas 
     for (i = 0; i < temple_image_names.length; i ++) {
@@ -68,13 +79,15 @@ function getSpiralCoordinatesAndSizes() {
         // float x = centerX + initialR * (float) (Math.exp(t * 1 / (Math.tan(47 * Math.PI / 100)))) * (float) (Math.cos(t));
         // float y = centerY + initialR * (float) (Math.exp(t * 1 / (Math.tan(47 * Math.PI / 100)))) * (float) (Math.sin(t));
     
-        var x = 1080 / 2 + 108 * (Math.exp(t * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.cos(t));
-        var y = 1980 / 2 + 108 * (Math.exp(t * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.sin(t));
+        var initialR = width / 10;
+
+        var x = width / 2 + initialR * (Math.exp(t * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.cos(t));
+        var y = height / 2 + initialR * (Math.exp(t * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.sin(t));
         //console.log(x + " and " + y);
     
         var tOuter = t + 2 * Math.PI;
-        var xOuter = 1080 / 2 + 108 * (Math.exp(tOuter * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.cos(tOuter));
-        var yOuter = 1980 / 2 + 108 * (Math.exp(tOuter * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.sin(tOuter));
+        var xOuter = width / 2 + initialR * (Math.exp(tOuter * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.cos(tOuter));
+        var yOuter = height / 2 + initialR * (Math.exp(tOuter * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.sin(tOuter));
         var size = Math.sqrt(Math.pow(Math.abs(x - xOuter), 2) + Math.pow(Math.abs(y - yOuter), 2)) * 0.73;
         //console.log(size);
     
