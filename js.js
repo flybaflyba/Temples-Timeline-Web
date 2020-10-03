@@ -2,24 +2,32 @@
 
 console.log("js running")
 
-var canvas = document.getElementById("myCanvas");
+var canvas = document.getElementById("mycanvas");
 var ctx = canvas.getContext("2d");
-var slider = document.getElementById("myRange");
+var slider = document.getElementById("myrange");
 var theta = 2000;
-var width;
-var hight;
+var canvasWidth;
+var canvasHeight;
 var temple_image_names;
 var temple_images;
 var spiralCoordinatesAndSizes;
+var windowWidth;
+var windowHeight;
 
 window.onload = function() {
 
-    width = canvas.getBoundingClientRect().width;
-    height = canvas.getBoundingClientRect().height;
-    console.log("canvas width is " + width);
-    console.log("canvas height is " + height);
+    resizeCanvas();
+
+    console.log(canvas.width);
+    console.log(canvas.height);
 
 
+    canvasWidth = canvas.getBoundingClientRect().width;
+    canvasHeight = canvas.getBoundingClientRect().height;
+    console.log("canvas width is " + canvasWidth);
+    console.log("canvas height is " + canvasHeight);
+
+    
     // read image names from a file 
     temple_image_names = readTextFile("temple_image_names.txt");
     // load images according to image names array
@@ -28,9 +36,9 @@ window.onload = function() {
     // get spiral coodinates and size on each coordinate 
     spiralCoordinatesAndSizes = getSpiralCoordinatesAndSizes();
 
-
+    
     ctx.beginPath();
-    ctx.moveTo(width / 2, height / 2);
+    ctx.moveTo(canvasWidth / 2, canvasHeight / 2);
 
     // draw a spiral, let's see how it looks like 
     spiralCoordinatesAndSizes.forEach( (coordinate) => {
@@ -42,7 +50,22 @@ window.onload = function() {
 
 }
 
+function resizeCanvas() {
+    windowWidth = window.innerWidth;
+    windowHeight = window.innerHeight;
+    canvas.width = Math.min(windowWidth * 0.8, windowHeight * 0.8);
+    canvas.height = Math.min(windowWidth * 0.8, windowHeight * 0.8);
+}
+
+function windowResizingDoSomething() {
+    console.log("window resizing")
+    resizeCanvas();
+
+
+}
+
 window.onchange = function() {
+
 
 
 }
@@ -79,15 +102,15 @@ function getSpiralCoordinatesAndSizes() {
         // float x = centerX + initialR * (float) (Math.exp(t * 1 / (Math.tan(47 * Math.PI / 100)))) * (float) (Math.cos(t));
         // float y = centerY + initialR * (float) (Math.exp(t * 1 / (Math.tan(47 * Math.PI / 100)))) * (float) (Math.sin(t));
     
-        var initialR = width / 10;
+        var initialR = canvasWidth / 10;
 
-        var x = width / 2 + initialR * (Math.exp(t * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.cos(t));
-        var y = height / 2 + initialR * (Math.exp(t * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.sin(t));
+        var x = canvasWidth / 2 + initialR * (Math.exp(t * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.cos(t));
+        var y = canvasHeight / 2 + initialR * (Math.exp(t * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.sin(t));
         //console.log(x + " and " + y);
     
         var tOuter = t + 2 * Math.PI;
-        var xOuter = width / 2 + initialR * (Math.exp(tOuter * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.cos(tOuter));
-        var yOuter = height / 2 + initialR * (Math.exp(tOuter * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.sin(tOuter));
+        var xOuter = canvasWidth / 2 + initialR * (Math.exp(tOuter * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.cos(tOuter));
+        var yOuter = canvasHeight / 2 + initialR * (Math.exp(tOuter * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.sin(tOuter));
         var size = Math.sqrt(Math.pow(Math.abs(x - xOuter), 2) + Math.pow(Math.abs(y - yOuter), 2)) * 0.73;
         //console.log(size);
     

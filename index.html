@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 <html>
 
+<head>
+    <title>Temples Timeline</title>
+    <link rel="stylesheet" href="css.css">
+</head>
+
+<body onresize="windowResizingDoSomething()">
+
+<h1 id="topheader">Temples Timeline</h1>
 
 
-<body>
-<h1>Temples Timeline</h1>
-
-<style>
-
-#myRange {
-    width: 500px;
-
-}
-</style>
-
-<input type="range" id="myRange" min="1000" max="7000" oninput="sliderChange()">
+<div id="mycanvasdiv">
+    <canvas id="mycanvas">
+        Your browser does not support the canvas element.
+    </canvas>
+</div>
 
 <br>
 
-<canvas id="myCanvas" width="1080" height="1980"
-style="border:1px solid #c3c3c3;">
-Your browser does not support the canvas element.
-</canvas>
+<div id="myrangediv">
+    <input type="range" id="myrange" min="1000" max="7000" oninput="sliderChange()">
+</div>
 
 
 <script src="js.js">
