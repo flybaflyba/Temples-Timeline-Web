@@ -13,25 +13,43 @@ var temple_images;
 var spiralCoordinatesAndSizes;
 var windowWidth;
 var windowHeight;
+var attemptToLoadAllImagesTimerId;
+
+function attemptToLoadAllImages() {
+    console.log("attempt to load");
+    console.log("names array after: " + temple_image_names);
+    if (temple_image_names != undefined || temple_image_names != null) {
+        clearInterval(attemptToLoadAllImagesTimerId)
+        temple_images = loadAllImages(temple_image_names);
+        spiralCoordinatesAndSizes = getSpiralCoordinatesAndSizes();
+        drawImages();
+    }
+}
 
 window.onload = function() {
 
     resizeCanvas();
 
     slider.value = theta;
-    console.log(canvas.width);
-    console.log(canvas.height);
+    //console.log(canvas.width);
+    //console.log(canvas.height);
 
 
     // calculationWidth = canvas.getBoundingClientRect().width;
     // calculationHeight = canvas.getBoundingClientRect().height;
 
-    console.log("canvas width is " + calculationWidth);
-    console.log("canvas height is " + calculationHeight);
+    // console.log("calculation width is " + calculationWidth);
+    // console.log("calculation height is " + calculationHeight);
 
-
+    //console.log("names array before: " + temple_image_names);
     // read image names from a file 
     temple_image_names = readTextFile("temple_image_names.txt");
+
+    //attemptToLoadAllImagesTimerId = setInterval(() => attemptToLoadAllImages(), 1000);
+
+    // // read image names from a file 
+    // temple_image_names = readTextFile("temple_image_names.txt");
+
     // load images according to image names array
     temple_images = loadAllImages(temple_image_names);
 
@@ -49,7 +67,6 @@ window.onload = function() {
     // });
     // ctx.stroke();
 
-
 }
 
 function resizeCanvas() {
@@ -64,7 +81,7 @@ function resizeCanvas() {
 }
 
 function windowResizingDoSomething() {
-    console.log("window resizing")
+    //console.log("window resizing")
     resizeCanvas();
     spiralCoordinatesAndSizes = getSpiralCoordinatesAndSizes();
     drawImages();
@@ -104,7 +121,7 @@ function drawImages() {
 // Get all coordinates and size on each coordinate
 function getSpiralCoordinatesAndSizes() {
     var spiralCoordinatesAndSizes = [];
-    for (t = -18; t < 17.5; t += 0.02) {
+    for (t = -25; t < 17.5; t += 0.02) { // used in other versions: t = -18
         // float x = centerX + initialR * (float) (Math.exp(t * 1 / (Math.tan(47 * Math.PI / 100)))) * (float) (Math.cos(t));
         // float y = centerY + initialR * (float) (Math.exp(t * 1 / (Math.tan(47 * Math.PI / 100)))) * (float) (Math.sin(t));
     
@@ -153,6 +170,7 @@ function readTextFile(file)
     }
     rawFile.open("GET", file, false); // We use 同步, Because we want to use the array, in the following code 
     rawFile.send(null);
+    //console.log(temple_image_names);
     return temple_image_names;
 }
 
