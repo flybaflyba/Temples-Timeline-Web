@@ -23,8 +23,8 @@ window.onload = function() {
     console.log(canvas.height);
 
 
-    calculationWidth = canvas.getBoundingClientRect().width;
-    calculationHeight = canvas.getBoundingClientRect().height;
+    // calculationWidth = canvas.getBoundingClientRect().width;
+    // calculationHeight = canvas.getBoundingClientRect().height;
 
     console.log("canvas width is " + calculationWidth);
     console.log("canvas height is " + calculationHeight);
@@ -55,13 +55,19 @@ window.onload = function() {
 function resizeCanvas() {
     windowWidth = window.innerWidth;
     windowHeight = window.innerHeight;
-    canvas.width = Math.min(windowWidth * 0.8, windowHeight * 0.8);
-    canvas.height = Math.min(windowWidth * 0.8, windowHeight * 0.8);
+
+    calculationWidth = Math.min(windowWidth * 0.7, windowHeight * 0.7);
+    calculationHeight = Math.min(windowWidth * 0.7, windowHeight * 0.7);
+
+    canvas.width = windowWidth * 1.0;
+    canvas.height = windowHeight * 0.8;
 }
 
 function windowResizingDoSomething() {
     console.log("window resizing")
     resizeCanvas();
+    spiralCoordinatesAndSizes = getSpiralCoordinatesAndSizes();
+    drawImages();
 
 
 }
@@ -104,13 +110,16 @@ function getSpiralCoordinatesAndSizes() {
     
         var initialR = calculationWidth / 10;
 
-        var x = calculationWidth / 2 + initialR * (Math.exp(t * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.cos(t));
-        var y = calculationHeight / 2 + initialR * (Math.exp(t * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.sin(t));
+        var centerX = canvas.getBoundingClientRect().width * 0.525;
+        var centerY = canvas.getBoundingClientRect().height * 0.55;
+
+        var x = centerX + initialR * (Math.exp(t * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.cos(t));
+        var y = centerY + initialR * (Math.exp(t * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.sin(t));
         //console.log(x + " and " + y);
     
         var tOuter = t + 2 * Math.PI;
-        var xOuter = calculationWidth / 2 + initialR * (Math.exp(tOuter * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.cos(tOuter));
-        var yOuter = calculationHeight / 2 + initialR * (Math.exp(tOuter * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.sin(tOuter));
+        var xOuter = centerX + initialR * (Math.exp(tOuter * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.cos(tOuter));
+        var yOuter = centerY + initialR * (Math.exp(tOuter * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.sin(tOuter));
         var size = Math.sqrt(Math.pow(Math.abs(x - xOuter), 2) + Math.pow(Math.abs(y - yOuter), 2)) * 0.73;
         //console.log(size);
     
