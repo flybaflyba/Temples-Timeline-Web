@@ -13,6 +13,7 @@ var temple_images;
 var spiralCoordinatesAndSizes;
 var windowWidth;
 var windowHeight;
+var intervalID
  
 
 window.onload = function() {
@@ -64,27 +65,55 @@ function windowResizingDoSomething() {
 }
 
 function sliderChange() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    theta = slider.value;
+    // ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // theta = slider.value;
     // console.log(theta);
     // update canvas with new theta 
-    drawImages();
+
+    clearInterval(intervalID);
+    intervalID = window.setInterval(drawImages, 1);
+ 
+    //drawImages();
+    //ctx.translate(100, 100);
 
 }
 
 function drawImages() {
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    //console.log("drawing images");
+    // console.log(theta);
+    // console.log(slider.value);
+
+    //theta = slider.value;
+
+    if (theta < slider.value) {
+        theta = theta + 1
+    } else if (theta > slider.value) {
+        theta = theta - 1
+    } 
+
+    if (Math.abs(slider.value - theta) <= 5 || Math.abs(theta - slider.value) <= 5) { // i'm using abs, so a single one should work, but it's not... i have to use both...
+        clearInterval(intervalID);
+    }
+
     // place all images on canvas 
     for (i = 0; i < temple_image_names.length; i ++) {
         //console.log('drawing temple number ' + i);
         var position_index = theta - 30 * i;
-        if (position_index > 0 && position_index < spiralCoordinatesAndSizes.length) {
-            var currentX = spiralCoordinatesAndSizes[position_index][0] - spiralCoordinatesAndSizes[position_index][2] / 2;
-            var currentY = spiralCoordinatesAndSizes[position_index][1] - spiralCoordinatesAndSizes[position_index][2] / 2;
-            var currentSize = spiralCoordinatesAndSizes[position_index][2];
+        var currentX;
+        var currentY;
+        var currentSize;
+        if (position_index > 0 && position_index < spiralCoordinatesAndSizes.length) {      
+            currentX = spiralCoordinatesAndSizes[position_index][0] - spiralCoordinatesAndSizes[position_index][2] / 2;
+            currentY = spiralCoordinatesAndSizes[position_index][1] - spiralCoordinatesAndSizes[position_index][2] / 2;
+            currentSize = spiralCoordinatesAndSizes[position_index][2];
             ctx.drawImage(temple_images[i], currentX, currentY, currentSize, currentSize);
         }
     }
+
 }
+
 
 
 // Get all coordinates and size on each coordinate
