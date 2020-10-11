@@ -1,10 +1,8 @@
 
 
-var test = ["hei",
-"ha"];
+console.log("common.js running")
 
-var temple_image_names = 
-[
+var temple_image_names = [
 "kirtland_temple",
 "old_nauvoo_temple",      
 "st_george_temple",       
@@ -232,3 +230,5 @@ var temple_image_names =
 "syracuse_utah_temple",
 "dubai_united_arab_emirates_templ"
 ]
+
+

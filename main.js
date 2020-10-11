@@ -1,10 +1,6 @@
 
 
-console.log("js running")
-
-
-console.log(temple_image_names.length);
-
+console.log("main.js running")
 
 var canvas = document.getElementById("mycanvas");
 var ctx = canvas.getContext("2d");
@@ -17,19 +13,6 @@ var temple_images;
 var spiralCoordinatesAndSizes;
 var windowWidth;
 var windowHeight;
-var attemptToLoadAllImagesTimerId;
-
-function attemptToLoadAllImages() {
-    console.log("attempt to load");
-    console.log("names array after: " + temple_image_names);
-    if (temple_image_names != undefined || temple_image_names != null) {
-        clearInterval(attemptToLoadAllImagesTimerId)
-        temple_images = loadAllImages(temple_image_names);
-        spiralCoordinatesAndSizes = getSpiralCoordinatesAndSizes();
-        drawImages();
-    }
-}
-
  
 
 window.onload = function() {
@@ -37,26 +20,6 @@ window.onload = function() {
     resizeCanvas();
 
     slider.value = theta;
-    //console.log(canvas.width);
-    //console.log(canvas.height);
-
-
-    // calculationWidth = canvas.getBoundingClientRect().width;
-    // calculationHeight = canvas.getBoundingClientRect().height;
-
-    // console.log("calculation width is " + calculationWidth);
-    // console.log("calculation height is " + calculationHeight);
-
-    //console.log("names array before: " + temple_image_names);
-    // read image names from a file 
-    //temple_image_names = readTextFile("temple_image_names.txt");
-
-
-
-    //attemptToLoadAllImagesTimerId = setInterval(() => attemptToLoadAllImages(), 1000);
-
-    // // read image names from a file 
-    // temple_image_names = readTextFile("temple_image_names.txt");
 
     // load images according to image names array
     temple_images = loadAllImages(temple_image_names);
@@ -77,6 +40,11 @@ window.onload = function() {
 
 }
 
+window.onchange = function() {
+
+
+}
+
 function resizeCanvas() {
     windowWidth = window.innerWidth;
     windowHeight = window.innerHeight;
@@ -93,13 +61,6 @@ function windowResizingDoSomething() {
     resizeCanvas();
     spiralCoordinatesAndSizes = getSpiralCoordinatesAndSizes();
     drawImages();
-
-
-}
-
-window.onchange = function() {
-
-
 }
 
 function sliderChange() {
@@ -152,48 +113,6 @@ function getSpiralCoordinatesAndSizes() {
     }
     return spiralCoordinatesAndSizes.reverse();
 }
-
-// Read image file names 
-function readTextFile(file)
-{
-    var temple_image_names = [];
-    if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
-        rawFile = new XMLHttpRequest();
-    } else { // code for IE6, IE5
-        rawFile = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-    rawFile.onreadystatechange = function ()
-    {
-        //console.log('readyState=>', rawFile.readyState);
-        if(rawFile.readyState === 4)
-        {
-            if(rawFile.status === 200 || rawFile.status == 0)
-            {
-                var allText = rawFile.responseText;
-                //alert(allText);
-                temple_image_names = allText.split('\n');
-                //console.log(array);
-            }
-        }
-    }
-    rawFile.open("GET", file, false); // We use 同步, Because we want to use the array, in the following code 
-    rawFile.send(null);
-    //console.log(temple_image_names);
-    return temple_image_names;
-}
-
-// 同步与异步的区别
-
-// 同步请求在请求完成前，后续的程序将处于暂停执行状态。而异步请求，除过请求事件函数中的程序在特定条件下执行外，请求外的程序会紧接着执行。
-
-// 部分属性在同步请求中不可用或受限制，如异步请求可以通过配置属性 timeout 来进行超时设置， 而同步请求则不能配置，如果在同步请求中配置timeout 会抛异常(禁止在同步请求中使用属性 timeout的异常信息)。
-
-// 这就意味着同步请求会阻断之后所有的代码执行，而这并不是大多项目所期望的场景。
-
-// 作者：前端沐先生
-// 链接：https://www.jianshu.com/p/9c38191007f2
-// 来源：简书
-// 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 
 //Load all temple images into an array 
 function loadAllImages(temple_image_names) {
