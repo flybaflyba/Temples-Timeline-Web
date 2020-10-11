@@ -65,28 +65,15 @@ function windowResizingDoSomething() {
 }
 
 function sliderChange() {
-    // ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // theta = slider.value;
-    // console.log(theta);
-    // update canvas with new theta 
-
     clearInterval(intervalID);
     intervalID = window.setInterval(drawImages, 1);
- 
-    //drawImages();
-    //ctx.translate(100, 100);
-
 }
 
 function drawImages() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    //console.log("drawing images");
-    // console.log(theta);
-    // console.log(slider.value);
 
-    //theta = slider.value;
-
+    // update canvas with new theta 
     if (theta < slider.value) {
         theta = theta + 1
     } else if (theta > slider.value) {
@@ -119,27 +106,43 @@ function drawImages() {
 // Get all coordinates and size on each coordinate
 function getSpiralCoordinatesAndSizes() {
     var spiralCoordinatesAndSizes = [];
+    var initialR;
+    var centerX;
+    var centerY;
+    var x;
+    var y;
+    var tOuter;
+    var xOuter;
+    var yOuter;
+    var size;
     for (t = -25; t < 17.5; t += 0.02) { // used in other versions: t = -18
         // float x = centerX + initialR * (float) (Math.exp(t * 1 / (Math.tan(47 * Math.PI / 100)))) * (float) (Math.cos(t));
         // float y = centerY + initialR * (float) (Math.exp(t * 1 / (Math.tan(47 * Math.PI / 100)))) * (float) (Math.sin(t));
     
-        var initialR = calculationWidth / 10;
+        initialR = calculationWidth / 10;
 
-        var centerX = canvas.getBoundingClientRect().width * 0.525;
-        var centerY = canvas.getBoundingClientRect().height * 0.55;
+        centerX = canvas.getBoundingClientRect().width * 0.525;
+        centerY = canvas.getBoundingClientRect().height * 0.55;
 
-        var x = centerX + initialR * (Math.exp(t * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.cos(t));
-        var y = centerY + initialR * (Math.exp(t * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.sin(t));
+        x = centerX + initialR * (Math.exp(t * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.cos(t));
+        y = centerY + initialR * (Math.exp(t * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.sin(t));
         //console.log(x + " and " + y);
     
-        var tOuter = t + 2 * Math.PI;
-        var xOuter = centerX + initialR * (Math.exp(tOuter * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.cos(tOuter));
-        var yOuter = centerY + initialR * (Math.exp(tOuter * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.sin(tOuter));
-        var size = Math.sqrt(Math.pow(Math.abs(x - xOuter), 2) + Math.pow(Math.abs(y - yOuter), 2)) * 0.73;
+        tOuter = t + 2 * Math.PI;
+        xOuter = centerX + initialR * (Math.exp(tOuter * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.cos(tOuter));
+        yOuter = centerY + initialR * (Math.exp(tOuter * 1 / (Math.tan(47 * Math.PI / 100)))) * (Math.sin(tOuter));
+        size = Math.sqrt(Math.pow(Math.abs(x - xOuter), 2) + Math.pow(Math.abs(y - yOuter), 2)) * 0.73;
         //console.log(size);
     
         spiralCoordinatesAndSizes.push([x, y, size]);
     }
+
+    for (xTop = x; xTop <= canvas.width + size; xTop += size / 30) {
+        spiralCoordinatesAndSizes.push([xTop, y, size]);
+    }
+
+
+
     return spiralCoordinatesAndSizes.reverse();
 }
 
