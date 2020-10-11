@@ -13,7 +13,7 @@ var temple_images;
 var spiralCoordinatesAndSizes;
 var windowWidth;
 var windowHeight;
-var intervalID
+var intervalID;
  
 
 window.onload = function() {
@@ -64,25 +64,53 @@ function windowResizingDoSomething() {
     drawImages();
 }
 
-function sliderChange() {
+
+function sliderReleased() {
+
+    // jump theta to a value that's close to the slider.value, but remain circles at it's psotion, that's why we use the number 30
+    var diff = Math.abs(theta - slider.value);
+    if (theta < slider.value) {
+        theta = theta + Math.floor(diff / 30) * 30 - 30 * 5;
+    } else if (theta > slider.value) {
+        theta = theta - Math.floor(diff / 30) * 30 + 30 * 5;
+    } 
+
     clearInterval(intervalID);
-    intervalID = window.setInterval(drawImages, 1);
+    intervalID = window.setInterval(animationDraw, 10);
+}
+
+function sliderChanging() {
+    // theta = slider.value;
+    // drawImages();
+}
+
+
+function animationDraw() {
+
+    // update canvas with new theta 
+
+    // if (theta < slider.value) {
+    //     theta = theta + 31; // (slider.value - theta) / 10;
+    // } else if (theta > slider.value) {
+    //     theta = theta - 31; // (theta - slider.value) / 10;
+    // } 
+
+    if (theta < slider.value) {
+        theta = theta + 1; // (slider.value - theta) / 10;
+    } else if (theta > slider.value) {
+        theta = theta - 1; // (theta - slider.value) / 10;
+    } 
+
+    if (Math.abs(slider.value - theta) <= 31 || Math.abs(theta - slider.value) <= 31) { // i'm using abs, so a single one should work, but it's not... i have to use both...
+        clearInterval(intervalID);
+    }
+
+    drawImages();
 }
 
 function drawImages() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // update canvas with new theta 
-    if (theta < slider.value) {
-        theta = theta + 1
-    } else if (theta > slider.value) {
-        theta = theta - 1
-    } 
-
-    if (Math.abs(slider.value - theta) <= 5 || Math.abs(theta - slider.value) <= 5) { // i'm using abs, so a single one should work, but it's not... i have to use both...
-        clearInterval(intervalID);
-    }
 
     // place all images on canvas 
     for (i = 0; i < temple_image_names.length; i ++) {
