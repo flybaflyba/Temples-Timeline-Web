@@ -2,6 +2,10 @@
 
 console.log("js running")
 
+
+console.log(temple_image_names.length);
+
+
 var canvas = document.getElementById("mycanvas");
 var ctx = canvas.getContext("2d");
 var slider = document.getElementById("myrange");
@@ -26,6 +30,8 @@ function attemptToLoadAllImages() {
     }
 }
 
+ 
+
 window.onload = function() {
 
     resizeCanvas();
@@ -43,7 +49,9 @@ window.onload = function() {
 
     //console.log("names array before: " + temple_image_names);
     // read image names from a file 
-    temple_image_names = readTextFile("temple_image_names.txt");
+    //temple_image_names = readTextFile("temple_image_names.txt");
+
+
 
     //attemptToLoadAllImagesTimerId = setInterval(() => attemptToLoadAllImages(), 1000);
 
