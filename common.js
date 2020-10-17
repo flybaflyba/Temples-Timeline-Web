@@ -228,7 +228,5 @@ var temple_image_names = [
 "pittsburgh_pennsylvania_temple",
 "benin_city_nigeria_temple",
 "syracuse_utah_temple",
-"dubai_united_arab_emirates_templ"
+"dubai_united_arab_emirates_temple"
 ]
-
-

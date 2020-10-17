@@ -16,8 +16,12 @@ var windowHeight;
 var intervalID;
  
 
+
+
+
 window.onload = function() {
 
+    
     resizeCanvas();
 
     slider.value = theta;
@@ -28,17 +32,29 @@ window.onload = function() {
     // get spiral coodinates and size on each coordinate 
     spiralCoordinatesAndSizes = getSpiralCoordinatesAndSizes();
 
-    drawImages();
+    console.log("hello");
 
-    // // draw a spiral, let's see how it looks like 
-    // ctx.beginPath();
-    // ctx.moveTo(canvasWidth / 2, canvasHeight / 2);
-    // spiralCoordinatesAndSizes.forEach( (coordinate) => {
-    //     //console.log(coordinate);
-    //     ctx.lineTo(coordinate[0], coordinate[1]);
-    // });
-    // ctx.stroke();
+    
+    
 
+    
+
+    // draw a spiral, let's see how it looks like 
+    ctx.beginPath();
+    ctx.moveTo(canvas.width / 2, canvas.height / 2);
+    spiralCoordinatesAndSizes.forEach( (coordinate) => {
+        //console.log(coordinate);
+        ctx.lineTo(coordinate[0], coordinate[1]);
+    });
+    ctx.stroke();
+
+    ctx.font = "30px Arial";
+    ctx.strokeText("Hello World", 10, 50);
+
+    myTimeOut = setTimeout(
+        function(){ 
+            drawImages(); }
+        , 3000);
 }
 
 window.onchange = function() {
@@ -67,19 +83,6 @@ function windowResizingDoSomething() {
 
 function sliderReleased() {
 
-    // effect 2-1, instant change and slow animation 
-    // jump theta to a value that's close to the slider.value, but remain circles at it's psotion, that's why we use the number 30
-    // var diff = Math.abs(theta - slider.value);
-    // if (theta < slider.value) {
-    //     theta = theta + Math.floor(diff / 30) * 30 - 30 * 5;
-    // } else if (theta > slider.value) {
-    //     theta = theta - Math.floor(diff / 30) * 30 + 30 * 5;
-    // } 
-
-    //clearInterval(intervalID);
-    //intervalID = window.setInterval(animationDraw, 10);
-
-
 }
 
 function sliderChanging() {
@@ -105,7 +108,7 @@ function sliderChanging() {
                 },
                 draw: function(progress) {
                   theta = Math.floor(oldTheta + progress * diff);
-                  console.log("theta " + theta + " slider.value " + slider.value);
+                  // console.log("theta " + theta + " slider.value " + slider.value);
                   drawImages();
                 }
               }); }
@@ -139,30 +142,6 @@ function animate({timing, draw, duration}) {
     });
   }
 
-function animationDraw() {
-
-    // update canvas with new theta 
-
-    // effect 1, fast animation 
-    if (theta < slider.value) {
-        theta = theta + 31; // (slider.value - theta) / 10;
-    } else if (theta > slider.value) {
-        theta = theta - 31; // (theta - slider.value) / 10;
-    } 
-
-    // effect 2-2, instant change and slow animation 
-    // if (theta < slider.value) {
-    //     theta = theta + 1; // (slider.value - theta) / 10;
-    // } else if (theta > slider.value) {
-    //     theta = theta - 1; // (theta - slider.value) / 10;
-    // } 
-
-    if (Math.abs(slider.value - theta) <= 31 || Math.abs(theta - slider.value) <= 31) { // i'm using abs, so a single one should work, but it's not... i have to use both...
-        clearInterval(intervalID);
-    }
-
-    drawImages();
-}
 
 
 function drawImages() {
@@ -181,13 +160,11 @@ function drawImages() {
             currentY = spiralCoordinatesAndSizes[position_index][1] - spiralCoordinatesAndSizes[position_index][2] / 2;
             currentSize = spiralCoordinatesAndSizes[position_index][2];
             ctx.drawImage(temple_images[i], currentX, currentY, currentSize, currentSize);
-            //console.log("drawing each");
+            console.log("drawing each");
         }
     }
 
 }
-
-
 
 
 // Get all coordinates and size on each coordinate
