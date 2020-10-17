@@ -14,6 +14,7 @@ var spiralCoordinatesAndSizes;
 var windowWidth;
 var windowHeight;
 var intervalID;
+var initialImagesDone = false;
  
 
 
@@ -32,16 +33,21 @@ function showLoading()
 document.getElementById("loadingDiv").style.display="block";
 }
 
+showLoading();
 
 
 window.onload = function() {
 
-    showLoading();
-    setTimeout(function() {
-        completeLoading();
-    }
-    , 5000);
-    
+
+    var loadingTimeInterval = setInterval(() => {
+        // console.log(initialImagesDone);
+        if (initialImagesDone) {
+            clearInterval(loadingTimeInterval);
+            completeLoading();
+        }
+    }, 1000);
+
+
     resizeCanvas();
 
     slider.value = theta;
@@ -52,6 +58,11 @@ window.onload = function() {
     // get spiral coodinates and size on each coordinate 
     spiralCoordinatesAndSizes = getSpiralCoordinatesAndSizes();
 
+    myTimeOut = setTimeout(
+        function(){ 
+            drawImages();
+            initialImagesDone = true; }
+        , 3000);
 
     // // draw a spiral, let's see how it looks like 
     // ctx.beginPath();
@@ -62,10 +73,7 @@ window.onload = function() {
     // });
     // ctx.stroke();
 
-    myTimeOut = setTimeout(
-    function(){ 
-        drawImages(); }
-    , 3000);
+
 
 
 
@@ -106,7 +114,7 @@ function sliderChanging() {
 
     clearTimeout(myTimeOut); // there are mant slider change events, everytime we start a new one, if the first one has not started, we will cancel it
 
-    console.log("start animation delay");
+    //console.log("start animation delay");
     var diff = slider.value - theta;
     var oldTheta = theta;
     var duration = Math.abs(diff / 3.4);
