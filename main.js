@@ -17,10 +17,30 @@ var intervalID;
  
 
 
+//在页面未加载完毕之前显示的loading Html自定义内容
+var _LoadingHtml = '<div id="loadingDiv" style="display: none; "><div id="over" style=" position: absolute;top: 0;left: 0; width: 100%;height: 100%; background-color: #f5f5f5;opacity:0.5;z-index: 1000;"></div><div id="layout" style="position: absolute;top: 40%; left: 40%;width: 20%; height: 20%;  z-index: 1001;text-align:center;"><p>loading now</p></div></div>';
+//呈现loading效果
+document.write(_LoadingHtml);
+ 
+//移除loading效果
+function completeLoading() {  
+		document.getElementById("loadingDiv").style.display="none";
+}
+//展示loading效果
+function showLoading()
+{
+document.getElementById("loadingDiv").style.display="block";
+}
+
 
 
 window.onload = function() {
 
+    showLoading();
+    setTimeout(function() {
+        completeLoading();
+    }
+    , 5000);
     
     resizeCanvas();
 
@@ -32,33 +52,26 @@ window.onload = function() {
     // get spiral coodinates and size on each coordinate 
     spiralCoordinatesAndSizes = getSpiralCoordinatesAndSizes();
 
-    console.log("hello");
 
-    
-    
-
-    
-
-    // draw a spiral, let's see how it looks like 
-    ctx.beginPath();
-    ctx.moveTo(canvas.width / 2, canvas.height / 2);
-    spiralCoordinatesAndSizes.forEach( (coordinate) => {
-        //console.log(coordinate);
-        ctx.lineTo(coordinate[0], coordinate[1]);
-    });
-    ctx.stroke();
-
-    ctx.font = "30px Arial";
-    ctx.strokeText("Hello World", 10, 50);
+    // // draw a spiral, let's see how it looks like 
+    // ctx.beginPath();
+    // ctx.moveTo(canvas.width / 2, canvas.height / 2);
+    // spiralCoordinatesAndSizes.forEach( (coordinate) => {
+    //     //console.log(coordinate);
+    //     ctx.lineTo(coordinate[0], coordinate[1]);
+    // });
+    // ctx.stroke();
 
     myTimeOut = setTimeout(
-        function(){ 
-            drawImages(); }
-        , 3000);
+    function(){ 
+        drawImages(); }
+    , 3000);
+
+
+
 }
 
 window.onchange = function() {
-
 
 }
 
@@ -160,7 +173,7 @@ function drawImages() {
             currentY = spiralCoordinatesAndSizes[position_index][1] - spiralCoordinatesAndSizes[position_index][2] / 2;
             currentSize = spiralCoordinatesAndSizes[position_index][2];
             ctx.drawImage(temple_images[i], currentX, currentY, currentSize, currentSize);
-            console.log("drawing each");
+            //console.log("drawing each");
         }
     }
 
