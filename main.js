@@ -86,19 +86,30 @@ function sliderChanging() {
     // theta = slider.value;
     // drawImages();
 
+    var myTimeOut;
+
+    clearTimeout(myTimeOut); // there are mant slider change events, everytime we start a new one, if the first one has not started, we will cancel it
+
+    console.log("start animation delay");
     var diff = slider.value - theta;
     var oldTheta = theta;
-    animate({
-        duration: 1000,
-        timing: function(timeFraction) {
-          return timeFraction;
-        },
-        draw: function(progress) {
-          theta = Math.floor(oldTheta + progress * diff);
-          //console.log("theta " + theta + " slider.value " + slider.value);
-          drawImages();
-        }
-      });
+    var duration = Math.abs(diff / 3.4);
+
+    // we set a delay to spiral next movement, so that when slider move very slowly, the image movements are not jerky 
+    myTimeOut = setTimeout(
+        function(){ 
+            animate({
+                duration: duration,
+                timing: function(timeFraction) {
+                  return timeFraction;
+                },
+                draw: function(progress) {
+                  theta = Math.floor(oldTheta + progress * diff);
+                  console.log("theta " + theta + " slider.value " + slider.value);
+                  drawImages();
+                }
+              }); }
+        , 30);
 
 }
 
@@ -108,7 +119,8 @@ function animate({timing, draw, duration}) {
   
     let requestId;
 
-    cancelAnimationFrame(requestId);
+    cancelAnimationFrame(requestId); // there are mant slider change events, everytime we start a new one, if the first one has not finished, we will cancel it
+
 
     requestId = requestAnimationFrame(function animate(time) {
       // timeFraction 从 0 增加到 1
@@ -116,7 +128,7 @@ function animate({timing, draw, duration}) {
       if (timeFraction > 1) timeFraction = 1;
   
       // 计算当前动画状态
-      let progress = timing(timeFraction);
+      let progress = (2 - timing(2 * (1 - timeFraction))) / 2;
   
       draw(progress); // 绘制
   
