@@ -67,39 +67,83 @@ function windowResizingDoSomething() {
 
 function sliderReleased() {
 
+    // effect 2-1, instant change and slow animation 
     // jump theta to a value that's close to the slider.value, but remain circles at it's psotion, that's why we use the number 30
-    var diff = Math.abs(theta - slider.value);
-    if (theta < slider.value) {
-        theta = theta + Math.floor(diff / 30) * 30 - 30 * 5;
-    } else if (theta > slider.value) {
-        theta = theta - Math.floor(diff / 30) * 30 + 30 * 5;
-    } 
+    // var diff = Math.abs(theta - slider.value);
+    // if (theta < slider.value) {
+    //     theta = theta + Math.floor(diff / 30) * 30 - 30 * 5;
+    // } else if (theta > slider.value) {
+    //     theta = theta - Math.floor(diff / 30) * 30 + 30 * 5;
+    // } 
 
-    clearInterval(intervalID);
-    intervalID = window.setInterval(animationDraw, 10);
+    //clearInterval(intervalID);
+    //intervalID = window.setInterval(animationDraw, 10);
+
+
 }
 
 function sliderChanging() {
     // theta = slider.value;
     // drawImages();
+
+    var diff = slider.value - theta;
+    var oldTheta = theta;
+    animate({
+        duration: 1000,
+        timing: function(timeFraction) {
+          return timeFraction;
+        },
+        draw: function(progress) {
+          theta = Math.floor(oldTheta + progress * diff);
+          //console.log("theta " + theta + " slider.value " + slider.value);
+          drawImages();
+        }
+      });
+
 }
 
+function animate({timing, draw, duration}) {
+
+    let start = performance.now();
+  
+    let requestId;
+
+    cancelAnimationFrame(requestId);
+
+    requestId = requestAnimationFrame(function animate(time) {
+      // timeFraction 从 0 增加到 1
+      let timeFraction = (time - start) / duration;
+      if (timeFraction > 1) timeFraction = 1;
+  
+      // 计算当前动画状态
+      let progress = timing(timeFraction);
+  
+      draw(progress); // 绘制
+  
+      if (timeFraction < 1) {
+        requestAnimationFrame(animate);
+      }
+  
+    });
+  }
 
 function animationDraw() {
 
     // update canvas with new theta 
 
-    // if (theta < slider.value) {
-    //     theta = theta + 31; // (slider.value - theta) / 10;
-    // } else if (theta > slider.value) {
-    //     theta = theta - 31; // (theta - slider.value) / 10;
-    // } 
-
+    // effect 1, fast animation 
     if (theta < slider.value) {
-        theta = theta + 1; // (slider.value - theta) / 10;
+        theta = theta + 31; // (slider.value - theta) / 10;
     } else if (theta > slider.value) {
-        theta = theta - 1; // (theta - slider.value) / 10;
+        theta = theta - 31; // (theta - slider.value) / 10;
     } 
+
+    // effect 2-2, instant change and slow animation 
+    // if (theta < slider.value) {
+    //     theta = theta + 1; // (slider.value - theta) / 10;
+    // } else if (theta > slider.value) {
+    //     theta = theta - 1; // (theta - slider.value) / 10;
+    // } 
 
     if (Math.abs(slider.value - theta) <= 31 || Math.abs(theta - slider.value) <= 31) { // i'm using abs, so a single one should work, but it's not... i have to use both...
         clearInterval(intervalID);
@@ -107,6 +151,7 @@ function animationDraw() {
 
     drawImages();
 }
+
 
 function drawImages() {
 
@@ -124,10 +169,12 @@ function drawImages() {
             currentY = spiralCoordinatesAndSizes[position_index][1] - spiralCoordinatesAndSizes[position_index][2] / 2;
             currentSize = spiralCoordinatesAndSizes[position_index][2];
             ctx.drawImage(temple_images[i], currentX, currentY, currentSize, currentSize);
+            //console.log("drawing each");
         }
     }
 
 }
+
 
 
 
