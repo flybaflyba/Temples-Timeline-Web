@@ -9,7 +9,7 @@ var theta = 5800;
 var calculationWidth;
 var calculationHeight;
 var temple_image_names;
-var temple_images;
+var temple_images_objects;
 var spiralCoordinatesAndSizes;
 var windowWidth;
 var windowHeight;
@@ -56,7 +56,7 @@ window.onload = function() {
     slider.value = theta;
 
     // load images according to image names array
-    temple_images = loadAllImages(temple_image_names);
+    temple_images_objects = loadAllImages(temple_image_names);
 
     // get spiral coodinates and size on each coordinate 
     spiralCoordinatesAndSizes = getSpiralCoordinatesAndSizes();
@@ -184,7 +184,7 @@ function animateEachImage(position_index, currentX, currentY, currentSize, key) 
             currentX = Math.floor(oldCurrentX + progress * diffX);
             currentY = Math.floor(oldCurrentY + progress * diffY);
             currentSize = Math.floor(oldCurrentSize + progress * diffSize);
-            ctx.drawImage(temple_images[key], currentX, currentY, currentSize, currentSize);    
+            ctx.drawImage(temple_images_objects[key].image, currentX, currentY, currentSize, currentSize);    
         }
     });
     
@@ -194,7 +194,7 @@ function drawImages() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    Object.keys(temple_images).forEach(function(key) {
+    Object.keys(temple_images_objects).forEach(function(key) {
 
         var position_index = theta - 30 * key;
         var currentX;
@@ -205,24 +205,27 @@ function drawImages() {
                 currentX = spiralCoordinatesAndSizes[position_index][0] - spiralCoordinatesAndSizes[position_index][2] / 2;
                 currentY = spiralCoordinatesAndSizes[position_index][1] - spiralCoordinatesAndSizes[position_index][2] / 2;
                 currentSize = spiralCoordinatesAndSizes[position_index][2];
-                ctx.drawImage(temple_images[key], currentX, currentY, currentSize, currentSize);
+                ctx.drawImage(temple_images_objects[key].image, currentX, currentY, currentSize, currentSize);
                 //console.log("drawing each");
             } else {
-                ctx.drawImage(temple_images[key], centerX-5, centerY-5, 10, 10);
+                ctx.drawImage(temple_images_objects[key].image, centerX-5, centerY-5, 10, 10);
             }
         } else {
             if (position_index > 0 && position_index < spiralCoordinatesAndSizes.length) {    
-                setTimeout(function(){
-                    currentX = spiralCoordinatesAndSizes[position_index][0] - spiralCoordinatesAndSizes[position_index][2] / 2;
-                    currentY = spiralCoordinatesAndSizes[position_index][1] - spiralCoordinatesAndSizes[position_index][2] / 2;
-                    currentSize = spiralCoordinatesAndSizes[position_index][2];
-                    console.log(currentX);
-                    animateEachImage(position_index, currentX, currentY, currentSize, key);
-                },0
-                )
+                // setTimeout(function(){
+                //     currentX = spiralCoordinatesAndSizes[position_index][0] - spiralCoordinatesAndSizes[position_index][2] / 2;
+                //     currentY = spiralCoordinatesAndSizes[position_index][1] - spiralCoordinatesAndSizes[position_index][2] / 2;
+                //     currentSize = spiralCoordinatesAndSizes[position_index][2];
+                //     animateEachImage(position_index, currentX, currentY, currentSize, key);
+                // },0)
+                currentX = spiralCoordinatesAndSizes[position_index][0] - spiralCoordinatesAndSizes[position_index][2] / 2;
+                currentY = spiralCoordinatesAndSizes[position_index][1] - spiralCoordinatesAndSizes[position_index][2] / 2;
+                currentSize = spiralCoordinatesAndSizes[position_index][2];
+                ctx.drawImage(temple_images_objects[key].image, currentX, currentY, currentSize, currentSize);
+
                 
             } else {
-                ctx.drawImage(temple_images[key], centerX-5, centerY-5, 10, 10);
+                ctx.drawImage(temple_images_objects[key].image, centerX-5, centerY-5, 10, 10);
             }
             
         }
@@ -294,15 +297,30 @@ function getSpiralCoordinatesAndSizes() {
     return spiralCoordinatesAndSizes.reverse();
 }
 
+
+
 //Load all temple images into an array 
 function loadAllImages(temple_image_names) {
-    var temple_images = [];
+    //var temple_images = [];
+    var temple_images_objects = [];
     for (i = 0; i < temple_image_names.length; i ++) {
         //console.log('temple_images/' + temple_image_names[i] + '_large.webp');
         var oneTemple = new Image();
         oneTemple.src = 'temple_images/' + temple_image_names[i] + '_large.webp';
-        temple_images.push(oneTemple);
+        //temple_images.push(oneTemple);
+        var temple_image_object = {
+            image: oneTemple,
+            currentX: -1,
+            currentY: -1,
+            currentSize: -1,
+            lastX: -1,
+            lastY: -1,
+            lastSize: -1,
+        };
+        temple_images_objects.push(temple_image_object);
+
     }
-    return temple_images;
+    //return temple_images;
+    return temple_images_objects;
 }
 
