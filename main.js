@@ -112,7 +112,7 @@ function sliderChanging() {
 
     var myTimeOut;
 
-    clearTimeout(myTimeOut); // there are mant slider change events, everytime we start a new one, if the first one has not started, we will cancel it
+    // clearTimeout(myTimeOut); // there are many slider change events, everytime we start a new one, if the first one has not started, we will cancel it
 
     //console.log("start animation delay");
     var diff = slider.value - theta;
@@ -143,7 +143,7 @@ function animate({timing, draw, duration}) {
   
     let requestId;
 
-    cancelAnimationFrame(requestId); // there are mant slider change events, everytime we start a new one, if the first one has not finished, we will cancel it
+    // cancelAnimationFrame(requestId); // there are mant slider change events, everytime we start a new one, if the first one has not finished, we will cancel it
 
 
     requestId = requestAnimationFrame(function animate(time) {
