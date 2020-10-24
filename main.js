@@ -15,6 +15,9 @@ var windowWidth;
 var windowHeight;
 var intervalID;
 var initialImagesDone = false;
+var firstDraw = true;
+var centerX;
+var centerY;
  
 
 
@@ -107,33 +110,31 @@ function sliderReleased() {
 }
 
 function sliderChanging() {
-    // theta = slider.value;
-    // drawImages();
+    firstDraw = false;
+    theta = slider.value;
+    drawImages();
 
-    var myTimeOut;
-
-    // clearTimeout(myTimeOut); // there are many slider change events, everytime we start a new one, if the first one has not started, we will cancel it
-
-    //console.log("start animation delay");
-    var diff = slider.value - theta;
-    var oldTheta = theta;
-    var duration = Math.abs(diff / 3.4);
-
-    // we set a delay to spiral next movement, so that when slider move very slowly, the image movements are not jerky 
-    myTimeOut = setTimeout(
-        function(){ 
-            animate({
-                duration: duration,
-                timing: function(timeFraction) {
-                  return timeFraction;
-                },
-                draw: function(progress) {
-                  theta = Math.floor(oldTheta + progress * diff);
-                  // console.log("theta " + theta + " slider.value " + slider.value);
-                  drawImages();
-                }
-              }); }
-        , 30);
+    // var myTimeOut;
+    // // clearTimeout(myTimeOut); // there are many slider change events, everytime we start a new one, if the first one has not started, we will cancel it
+    // //console.log("start animation delay");
+    // var diff = slider.value - theta;
+    // var oldTheta = theta;
+    // var duration = Math.abs(diff / 3.4);
+    // // we set a delay to spiral next movement, so that when slider move very slowly, the image movements are not jerky 
+    // myTimeOut = setTimeout(
+    //     function(){ 
+    //         animate({
+    //             duration: duration,
+    //             timing: function(timeFraction) {
+    //               return timeFraction;
+    //             },
+    //             draw: function(progress) {
+    //               theta = Math.floor(oldTheta + progress * diff);
+    //               // console.log("theta " + theta + " slider.value " + slider.value);
+    //               drawImages();
+    //             }
+    //           }); }
+    //     , 30);
 
 }
 
@@ -176,13 +177,16 @@ function drawImages() {
         var currentX;
         var currentY;
         var currentSize;
-        if (position_index > 0 && position_index < spiralCoordinatesAndSizes.length) {      
+        if (position_index > 0 && position_index < spiralCoordinatesAndSizes.length) {    
             currentX = spiralCoordinatesAndSizes[position_index][0] - spiralCoordinatesAndSizes[position_index][2] / 2;
             currentY = spiralCoordinatesAndSizes[position_index][1] - spiralCoordinatesAndSizes[position_index][2] / 2;
             currentSize = spiralCoordinatesAndSizes[position_index][2];
             ctx.drawImage(temple_images[i], currentX, currentY, currentSize, currentSize);
             //console.log("drawing each");
+        } else {
+            ctx.drawImage(temple_images[i], centerX-5, centerY-5, 10, 10);
         }
+        
     }
 
 }
@@ -192,8 +196,6 @@ function drawImages() {
 function getSpiralCoordinatesAndSizes() {
     var spiralCoordinatesAndSizes = [];
     var initialR;
-    var centerX;
-    var centerY;
     var x;
     var y;
     var tOuter;
