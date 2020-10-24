@@ -153,7 +153,7 @@ function animate({timing, draw, duration}) {
       if (timeFraction > 1) timeFraction = 1;
   
       // 计算当前动画状态
-      let progress = (2 - timing(2 * (1 - timeFraction))) / 2;
+      let progress = timing(timeFraction);
   
       draw(progress); // 绘制
   
@@ -165,29 +165,90 @@ function animate({timing, draw, duration}) {
   }
 
 
+function animateEachImage(position_index, currentX, currentY, currentSize, key) {
+    
+    var diffX = spiralCoordinatesAndSizes[position_index][0] - spiralCoordinatesAndSizes[position_index][2] / 2 - currentX;
+    var diffY = spiralCoordinatesAndSizes[position_index][1] - spiralCoordinatesAndSizes[position_index][2] / 2; - currentY;
+    var diffSize = spiralCoordinatesAndSizes[position_index][2] - currentSize;
+    var oldCurrentX = currentX;
+    var oldCurrentY = currentY;
+    var oldCurrentSize = currentSize;
+    animate({
+        duration: 1000,
+        timing: function(timeFraction) {
+            return timeFraction;
+        },
+        draw: function(progress) {
+            // console.log(progress);
+            // console.log(temple_images[key]);
+            currentX = Math.floor(oldCurrentX + progress * diffX);
+            currentY = Math.floor(oldCurrentY + progress * diffY);
+            currentSize = Math.floor(oldCurrentSize + progress * diffSize);
+            ctx.drawImage(temple_images[key], currentX, currentY, currentSize, currentSize);    
+        }
+    });
+    
+}
 
 function drawImages() {
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // place all images on canvas 
-    for (i = 0; i < temple_image_names.length; i ++) {
-        //console.log('drawing temple number ' + i);
-        var position_index = theta - 30 * i;
+    Object.keys(temple_images).forEach(function(key) {
+
+        var position_index = theta - 30 * key;
         var currentX;
         var currentY;
         var currentSize;
-        if (position_index > 0 && position_index < spiralCoordinatesAndSizes.length) {    
-            currentX = spiralCoordinatesAndSizes[position_index][0] - spiralCoordinatesAndSizes[position_index][2] / 2;
-            currentY = spiralCoordinatesAndSizes[position_index][1] - spiralCoordinatesAndSizes[position_index][2] / 2;
-            currentSize = spiralCoordinatesAndSizes[position_index][2];
-            ctx.drawImage(temple_images[i], currentX, currentY, currentSize, currentSize);
-            //console.log("drawing each");
+        if (firstDraw) {
+            if (position_index > 0 && position_index < spiralCoordinatesAndSizes.length) {    
+                currentX = spiralCoordinatesAndSizes[position_index][0] - spiralCoordinatesAndSizes[position_index][2] / 2;
+                currentY = spiralCoordinatesAndSizes[position_index][1] - spiralCoordinatesAndSizes[position_index][2] / 2;
+                currentSize = spiralCoordinatesAndSizes[position_index][2];
+                ctx.drawImage(temple_images[key], currentX, currentY, currentSize, currentSize);
+                //console.log("drawing each");
+            } else {
+                ctx.drawImage(temple_images[key], centerX-5, centerY-5, 10, 10);
+            }
         } else {
-            ctx.drawImage(temple_images[i], centerX-5, centerY-5, 10, 10);
+            if (position_index > 0 && position_index < spiralCoordinatesAndSizes.length) {    
+                setTimeout(function(){
+                    currentX = spiralCoordinatesAndSizes[position_index][0] - spiralCoordinatesAndSizes[position_index][2] / 2;
+                    currentY = spiralCoordinatesAndSizes[position_index][1] - spiralCoordinatesAndSizes[position_index][2] / 2;
+                    currentSize = spiralCoordinatesAndSizes[position_index][2];
+                    console.log(currentX);
+                    animateEachImage(position_index, currentX, currentY, currentSize, key);
+                },0
+                )
+                
+            } else {
+                ctx.drawImage(temple_images[key], centerX-5, centerY-5, 10, 10);
+            }
+            
         }
+    });
+
+
+    // // place all images on canvas 
+    // for (i = 0; i < temple_image_names.length; i ++) {
+    //     //console.log('drawing temple number ' + i);
+    //     var position_index = theta - 30 * i;
+    //     var currentX;
+    //     var currentY;
+    //     var currentSize;
+    //     if (position_index > 0 && position_index < spiralCoordinatesAndSizes.length) {    
+    //         currentX = spiralCoordinatesAndSizes[position_index][0] - spiralCoordinatesAndSizes[position_index][2] / 2;
+    //         currentY = spiralCoordinatesAndSizes[position_index][1] - spiralCoordinatesAndSizes[position_index][2] / 2;
+    //         currentSize = spiralCoordinatesAndSizes[position_index][2];
+    //         ctx.drawImage(temple_images[i], currentX, currentY, currentSize, currentSize);
+    //         //console.log("drawing each");
+    //     } else {
+    //         ctx.drawImage(temple_images[i], centerX-5, centerY-5, 10, 10);
+    //     }
         
-    }
+    // }
+
+
 
 }
 
