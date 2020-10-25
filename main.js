@@ -165,28 +165,44 @@ function animate({timing, draw, duration}) {
   }
 
 
-function animateEachImage(position_index, currentX, currentY, currentSize, key) {
+function animateEachImage(position_index, key) {
     
-    var diffX = spiralCoordinatesAndSizes[position_index][0] - spiralCoordinatesAndSizes[position_index][2] / 2 - currentX;
-    var diffY = spiralCoordinatesAndSizes[position_index][1] - spiralCoordinatesAndSizes[position_index][2] / 2; - currentY;
-    var diffSize = spiralCoordinatesAndSizes[position_index][2] - currentSize;
-    var oldCurrentX = currentX;
-    var oldCurrentY = currentY;
-    var oldCurrentSize = currentSize;
+    var currentX = spiralCoordinatesAndSizes[position_index][0] - spiralCoordinatesAndSizes[position_index][2] / 2;
+    var currentY = spiralCoordinatesAndSizes[position_index][1] - spiralCoordinatesAndSizes[position_index][2] / 2;
+    var currentSize = spiralCoordinatesAndSizes[position_index][2];
+
+    temple_images_objects[key].currentX = currentX;
+    temple_images_objects[key].currentY = currentY;
+    temple_images_objects[key].currentSize = currentSize;
+
+        
+    var diffX = temple_images_objects[key].currentX - temple_images_objects[key].lastX;
+    var diffY = temple_images_objects[key].currentY - temple_images_objects[key].lastY;
+    var diffSize = temple_images_objects[key].currentSize - temple_images_objects[key].lastSize;
+
+    //ctx.drawImage(temple_images_objects[key].image, temple_images_objects[key].currentX, temple_images_objects[key].currentY, temple_images_objects[key].currentSize, temple_images_objects[key].currentSize);
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     animate({
         duration: 1000,
         timing: function(timeFraction) {
             return timeFraction;
         },
         draw: function(progress) {
+            
             // console.log(progress);
             // console.log(temple_images[key]);
-            currentX = Math.floor(oldCurrentX + progress * diffX);
-            currentY = Math.floor(oldCurrentY + progress * diffY);
-            currentSize = Math.floor(oldCurrentSize + progress * diffSize);
-            ctx.drawImage(temple_images_objects[key].image, currentX, currentY, currentSize, currentSize);    
+            temple_images_objects[key].currentX = Math.floor(temple_images_objects[key].lastX + progress * diffX);
+            temple_images_objects[key].currentY = Math.floor(temple_images_objects[key].lastY + progress * diffY);
+            temple_images_objects[key].currentSize = Math.floor(temple_images_objects[key].lastSize + progress * diffSize);
+            ctx.drawImage(temple_images_objects[key].image, temple_images_objects[key].currentX, temple_images_objects[key].currentY, temple_images_objects[key].currentSize, temple_images_objects[key].currentSize);
+
         }
     });
+
+    temple_images_objects[key].lastX = currentX;
+    temple_images_objects[key].lastY = currentY;
+    temple_images_objects[key].lastSize = currentSize;
     
 }
 
@@ -205,27 +221,56 @@ function drawImages() {
                 currentX = spiralCoordinatesAndSizes[position_index][0] - spiralCoordinatesAndSizes[position_index][2] / 2;
                 currentY = spiralCoordinatesAndSizes[position_index][1] - spiralCoordinatesAndSizes[position_index][2] / 2;
                 currentSize = spiralCoordinatesAndSizes[position_index][2];
-                ctx.drawImage(temple_images_objects[key].image, currentX, currentY, currentSize, currentSize);
-                //console.log("drawing each");
+                temple_images_objects[key].currentX = currentX;
+                temple_images_objects[key].currentY = currentY;
+                temple_images_objects[key].currentSize = currentSize;
+                ctx.drawImage(temple_images_objects[key].image, temple_images_objects[key].currentX, temple_images_objects[key].currentY, temple_images_objects[key].currentSize, temple_images_objects[key].currentSize);
+                temple_images_objects[key].lastX = currentX;
+                temple_images_objects[key].lastY = currentY;
+                temple_images_objects[key].lastSize = currentSize;
             } else {
-                ctx.drawImage(temple_images_objects[key].image, centerX-5, centerY-5, 10, 10);
+                currentX = centerX-5;
+                currentY = centerY-5;
+                currentSize = 10;
+                temple_images_objects[key].currentX = currentX;
+                temple_images_objects[key].currentY = currentY;
+                temple_images_objects[key].currentSize = currentSize;
+                ctx.drawImage(temple_images_objects[key].image, temple_images_objects[key].currentX, temple_images_objects[key].currentY, temple_images_objects[key].currentSize, temple_images_objects[key].currentSize);
+                temple_images_objects[key].lastX = currentX;
+                temple_images_objects[key].lastY = currentY;
+                temple_images_objects[key].lastSize = currentSize;
+            
             }
         } else {
             if (position_index > 0 && position_index < spiralCoordinatesAndSizes.length) {    
-                // setTimeout(function(){
-                //     currentX = spiralCoordinatesAndSizes[position_index][0] - spiralCoordinatesAndSizes[position_index][2] / 2;
-                //     currentY = spiralCoordinatesAndSizes[position_index][1] - spiralCoordinatesAndSizes[position_index][2] / 2;
-                //     currentSize = spiralCoordinatesAndSizes[position_index][2];
-                //     animateEachImage(position_index, currentX, currentY, currentSize, key);
-                // },0)
-                currentX = spiralCoordinatesAndSizes[position_index][0] - spiralCoordinatesAndSizes[position_index][2] / 2;
-                currentY = spiralCoordinatesAndSizes[position_index][1] - spiralCoordinatesAndSizes[position_index][2] / 2;
-                currentSize = spiralCoordinatesAndSizes[position_index][2];
-                ctx.drawImage(temple_images_objects[key].image, currentX, currentY, currentSize, currentSize);
+                setTimeout(function(){
+                    animateEachImage(position_index, key);
+                },1)
 
-                
+                // currentX = spiralCoordinatesAndSizes[position_index][0] - spiralCoordinatesAndSizes[position_index][2] / 2;
+                // currentY = spiralCoordinatesAndSizes[position_index][1] - spiralCoordinatesAndSizes[position_index][2] / 2;
+                // currentSize = spiralCoordinatesAndSizes[position_index][2];
+
+                // temple_images_objects[key].currentX = currentX;
+                // temple_images_objects[key].currentY = currentY;
+                // temple_images_objects[key].currentSize = currentSize;
+                // ctx.drawImage(temple_images_objects[key].image, temple_images_objects[key].currentX, temple_images_objects[key].currentY, temple_images_objects[key].currentSize, temple_images_objects[key].currentSize);
+                // temple_images_objects[key].lastX = currentX;
+                // temple_images_objects[key].lastY = currentY;
+                // temple_images_objects[key].lastSize = currentSize;
+
+
             } else {
-                ctx.drawImage(temple_images_objects[key].image, centerX-5, centerY-5, 10, 10);
+                currentX = centerX-5;
+                currentY = centerY-5;
+                currentSize = 10;
+                temple_images_objects[key].currentX = currentX;
+                temple_images_objects[key].currentY = currentY;
+                temple_images_objects[key].currentSize = currentSize;
+                ctx.drawImage(temple_images_objects[key].image, temple_images_objects[key].currentX, temple_images_objects[key].currentY, temple_images_objects[key].currentSize, temple_images_objects[key].currentSize);
+                temple_images_objects[key].lastX = currentX;
+                temple_images_objects[key].lastY = currentY;
+                temple_images_objects[key].lastSize = currentSize;
             }
             
         }
